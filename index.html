@@ -12,9 +12,6 @@
     
     <title>Lissi und der Wilde Kaiser</title>
     
-    <!-- Load HLS.js from CDN -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/hls.js/1.4.12/hls.min.js"></script>
-    
     <style>
         * {
             margin: 0;
@@ -48,12 +45,13 @@
             overflow: hidden;
         }
         
-        #videoPlayer {
+        .video-container iframe {
             position: absolute;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
+            border: none;
             border-radius: 12px;
         }
         
@@ -96,61 +94,16 @@
     <div class="container">
         <h1 class="title">Lissi und der Wilde Kaiser</h1>
         <div class="video-container">
-            <video id="videoPlayer" controls playsinline></video>
+            <iframe src="https://player.vimeo.com/video/1023477484?title=0&byline=0&portrait=0&badge=0&autopause=0&player_id=0&app_id=58479" 
+                    allow="autoplay; fullscreen; picture-in-picture; clipboard-write" 
+                    title="Lissi und der wilde Kaiser"
+                    allowfullscreen>
+            </iframe>
         </div>
         <div class="message">
             Hinweis: Der Film ist in SD-Qualität (480p) verfügbar, da es sich um einen älteren Film handelt. 
             Wir hoffen, du hast trotzdem viel Spaß beim Ansehen! 🎬
         </div>
     </div>
-
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const video = document.getElementById('videoPlayer');
-            const source = 'IHRE_M3U8_URL_HIER'; // Hier Ihre m3u8-URL einfügen
-            
-            if (Hls.isSupported()) {
-                const hls = new Hls({
-                    debug: false,
-                    enableWorker: true,
-                    lowLatencyMode: true
-                });
-                
-                hls.loadSource(source);
-                hls.attachMedia(video);
-                
-                hls.on(Hls.Events.MANIFEST_PARSED, function() {
-                    video.play().catch(function(error) {
-                        console.log("Autoplay prevented:", error);
-                    });
-                });
-                
-                hls.on(Hls.Events.ERROR, function(event, data) {
-                    if (data.fatal) {
-                        switch(data.type) {
-                            case Hls.ErrorTypes.NETWORK_ERROR:
-                                hls.startLoad();
-                                break;
-                            case Hls.ErrorTypes.MEDIA_ERROR:
-                                hls.recoverMediaError();
-                                break;
-                            default:
-                                hls.destroy();
-                                break;
-                        }
-                    }
-                });
-            }
-            // Fallback für Safari (iOS)
-            else if (video.canPlayType('application/vnd.apple.mpegurl')) {
-                video.src = source;
-                video.addEventListener('loadedmetadata', function() {
-                    video.play().catch(function(error) {
-                        console.log("Autoplay prevented:", error);
-                    });
-                });
-            }
-        });
-    </script>
 </body>
 </html>
